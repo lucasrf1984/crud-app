@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-crud-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: java-crud-app
+  template:
+    metadata:
+      labels:
+        app: java-crud-app
+    spec:
+      containers:
+      - name: java-crud-app
+        image: java-crud:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_HOST
+          value: "mongodb-service"
+        - name: MONGO_PORT
+          value: "27017"
+        - name: MONGO_DATABASE
+          value: "cruddb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-crud-service
+spec:
+  selector:
+    app: java-crud-app
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer
