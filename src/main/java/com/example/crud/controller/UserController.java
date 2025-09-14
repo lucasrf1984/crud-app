@@ -15,7 +15,11 @@ public class UserController {
     
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        System.out.println("Loading users...");
+        var users = userRepository.findAll();
+        System.out.println("Found " + users.size() + " users");
+        users.forEach(user -> System.out.println("User: " + user));
+        model.addAttribute("users", users);
         return "index";
     }
     
@@ -39,7 +43,12 @@ public class UserController {
     
     @PostMapping("/save")
     public String saveUser(@ModelAttribute User user) {
-        userRepository.save(user);
+        System.out.println("Saving user: " + user.getName() + " - " + user.getEmail());
+        if (user.getId() == null || user.getId().isEmpty()) {
+            user.setId(null); // Force MongoDB to generate new ID
+        }
+        User saved = userRepository.save(user);
+        System.out.println("User saved: " + saved);
         return "redirect:/";
     }
     

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: java-crud-app
-        image: java-crud:latest
+        image: lucasrf/java-crud:v3
         ports:
         - containerPort: 8080
         env:
@@ -24,6 +24,10 @@ spec:
           value: "27017"
         - name: MONGO_DATABASE
           value: "cruddb"
+        - name: MONGO_USERNAME
+          value: "admin"
+        - name: MONGO_PASSWORD
+          value: "password123"
 ---
 apiVersion: v1
 kind: Service
@@ -35,4 +39,4 @@ spec:
   ports:
   - port: 80
     targetPort: 8080
-  type: LoadBalancer
+  type: NodePort
